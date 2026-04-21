@@ -1,0 +1,65 @@
+; pjsip.conf.template
+; このファイルをコピーして pjsip.conf を作成し、<PLACEHOLDER> を実際の値に置換してください。
+; pjsip.conf はパスワードを含むため .gitignore 対象です（絶対に git にコミットしないこと）。
+
+; ===== Transport =====
+[transport-udp]
+type=transport
+protocol=udp
+bind=0.0.0.0:5060
+; NAT対策: EC2 の Elastic IP を設定しないとワンウェイオーディオになる
+external_media_address=<ELASTIC_IP>
+external_signaling_address=<ELASTIC_IP>
+; VPC の CIDR（terraform outputs の vpc_cidr に合わせる）
+local_net=10.0.0.0/16
+
+; ===== 内線 1001（スマートフォン Zoiper）=====
+[1001]
+type=endpoint
+transport=transport-udp
+context=internal
+disallow=all
+allow=ulaw
+allow=alaw
+auth=auth1001
+aors=aor1001
+; NAT 環境では direct_media=no が必須
+direct_media=no
+rtp_symmetric=yes
+force_rport=yes
+rewrite_contact=yes
+
+[auth1001]
+type=auth
+auth_type=userpass
+username=1001
+password=<STRONG_PASSWORD_1001>
+
+[aor1001]
+type=aor
+max_contacts=1
+
+; ===== 内線 1002（PC Zoiper）=====
+[1002]
+type=endpoint
+transport=transport-udp
+context=internal
+disallow=all
+allow=ulaw
+allow=alaw
+auth=auth1002
+aors=aor1002
+direct_media=no
+rtp_symmetric=yes
+force_rport=yes
+rewrite_contact=yes
+
+[auth1002]
+type=auth
+auth_type=userpass
+username=1002
+password=<STRONG_PASSWORD_1002>
+
+[aor1002]
+type=aor
+max_contacts=1

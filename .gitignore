@@ -1,0 +1,20 @@
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfvars
+
+# SSH 鍵
+*.pem
+*.key
+
+# Asterisk（パスワード含む実ファイル）
+asterisk/pjsip.conf
+
+# 環境変数
+.env
+.env.*
+
+# macOS
+.DS_Store
