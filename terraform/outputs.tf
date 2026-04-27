@@ -9,6 +9,6 @@ output "ssh_command" {
 }
 
 output "rsync_command" {
-  description = "Asterisk 設定ファイルの転送コマンド"
-  value       = "rsync -av asterisk/ ubuntu@${module.ec2.elastic_ip}:/etc/asterisk/"
+  description = "Asterisk 設定ファイルの転送コマンド（sudoでrsyncを実行してパーミッションエラーを回避）"
+  value       = "rsync -av --rsync-path='sudo rsync' -e 'ssh -i <your-key.pem>' asterisk/ ubuntu@${module.ec2.elastic_ip}:/etc/asterisk/"
 }

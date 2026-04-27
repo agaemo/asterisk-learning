@@ -8,15 +8,30 @@
   - https://aws.amazon.com/jp/ でアカウント登録
   - クレジットカード登録が必要（フリーティア範囲内なら無料）
 
+- [ ] **IAM ユーザーを作成する**（ルートアカウントのキーは使わないこと）
+  - AWS コンソール → IAM → ユーザー → 「ユーザーの作成」
+  - ユーザー名を決める（例: `terraform-user`）
+  - 「AWS マネジメントコンソールへのアクセス」は不要
+  - 権限: 「既存のポリシーを直接アタッチ」→ `AdministratorAccess`（学習用）
+  - 作成後 → 「セキュリティ認証情報」タブ → 「アクセスキーの作成」
+  - 用途: 「コマンドラインインターフェース（CLI）」を選択
+  - アクセスキー ID とシークレットアクセスキーを安全な場所に保存
+
 - [ ] **AWS CLI をインストール・設定する**
   ```bash
   # インストール（Mac）
   brew install awscli
 
-  # 設定（アクセスキーを入力）
+  # 設定（上で作成した IAM ユーザーのアクセスキーを入力）
   aws configure
+  # AWS Access Key ID: （IAM ユーザーのキー ID）
+  # AWS Secret Access Key: （IAM ユーザーのシークレット）
+  # Default region name: ap-northeast-1
+  # Default output format: json
+
+  # 動作確認
+  aws sts get-caller-identity
   ```
-  → AWS コンソール → 右上のユーザー名 → 「セキュリティ認証情報」→ アクセスキー作成
 
 - [ ] **Terraform をインストールする**
   ```bash
@@ -74,6 +89,15 @@
   ```
   → 完了後に `elastic_ip` が表示されます（例: `13.112.xxx.xxx`）
 
+- [ ] **EC2 が SSH 接続できるまで待つ**（apply 完了後 1〜2 分）
+  ```bash
+  # SSH が通るまでリトライ
+  until ssh -i asterisk-key.pem -o ConnectTimeout=5 -o StrictHostKeyChecking=no ubuntu@<EIP> "echo ok"; do
+    echo "待機中..."; sleep 10
+  done
+  echo "SSH 接続可能になりました"
+  ```
+
 ---
 
 ### Asterisk 設定
@@ -98,7 +122,8 @@
 
 - [ ] **設定ファイルを EC2 に転送する**
   ```bash
-  rsync -av -e "ssh -i asterisk-key.pem" asterisk/ ubuntu@<EIP>:/etc/asterisk/
+  # --rsync-path="sudo rsync": /etc/asterisk/ は asterisk:asterisk 所有のため sudo が必要
+  rsync -av --rsync-path="sudo rsync" -e "ssh -i asterisk-key.pem" asterisk/ ubuntu@<EIP>:/etc/asterisk/
   ssh -i asterisk-key.pem ubuntu@<EIP> "sudo systemctl restart asterisk"
   ```
 
@@ -131,11 +156,12 @@
 
 ### 後片付け（学習終了時）
 
-- [ ] **インフラを削除する**（Elastic IP の課金を止めるため）
+- [ ] **インフラを削除する**
   ```bash
   terraform -chdir=terraform destroy
   # "yes" を入力して実行
   ```
+  > **注意**: インスタンスを「停止（stop）」するだけでは不十分です。Elastic IP はインスタンスに関連付けられていても、インスタンスが停止中は課金（$0.005/時間）が発生します。学習が終わったら必ず `destroy` してください。
 
 ---
 

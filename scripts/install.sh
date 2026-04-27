@@ -26,9 +26,7 @@ apt-get install -y \
   libedit-dev \
   libxslt1-dev \
   binutils-dev \
-  libiksemel-dev \
   libsrtp2-dev \
-  libbluetooth-dev \
   libunbound-dev \
   curl \
   wget \
