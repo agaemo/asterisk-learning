@@ -4,6 +4,17 @@ AWS EC2 上に Asterisk 20 PBX を構築し、SIP softphone（Zoiper）で内線
 
 ---
 
+## このリポジトリの使い方
+
+```bash
+git clone git@github.com:agaemo/asterisk-learning.git my-asterisk-learning
+cd my-asterisk-learning
+```
+
+以降の手順は `my-asterisk-learning/` 内で作業します。
+
+---
+
 ## 前提条件
 
 | ツール | バージョン |
