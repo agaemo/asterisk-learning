@@ -183,6 +183,14 @@ terraform -chdir=terraform init
 terraform version
 ```
 
+### terraform apply で "InvalidKeyPair.NotFound" になる
+
+AWS コンソールのリージョンが東京（`ap-northeast-1`）以外でキーペアを作成した場合に発生します。キーペアはリージョンごとに管理されており、EC2 と同じリージョンで作成する必要があります。
+
+AWS コンソール右上のリージョンを **「アジアパシフィック（東京）」** に切り替えてから、EC2 → キーペア → 「キーペアの作成」で作成してください。
+
+> AWS コンソールはデフォルトで「米国東部（バージニア北部）」になっていることが多いため注意が必要です。
+
 ### 登録できない
 ```bash
 # Asterisk のログをリアルタイム確認
