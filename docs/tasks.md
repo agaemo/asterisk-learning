@@ -39,6 +39,8 @@ flowchart TD
     subgraph CLEANUP["⑥ 後片付け"]
         S[terraform destroy] --> T[Zoiper 削除]
         T --> U[pjsip.conf・tfvars 削除]
+        U --> V[AWS キーペア削除]
+        V --> W[~/.ssh 秘密鍵削除]
     end
 
     D --> E
@@ -46,7 +48,7 @@ flowchart TD
     L --> M
     O --> P
     R --> S
-    U --> Z([完了])
+    W --> Z([完了])
 ```
 
 </details>
@@ -248,6 +250,21 @@ flowchart TD
   ```bash
   rm terraform/terraform.tfvars
   ```
+
+- [ ] **AWS キーペアを削除する**
+  - AWS コンソール → EC2 → 左メニュー「キーペア」
+  - `asterisk-key` を選択 → 「アクション」→「削除」
+
+- [ ] **ローカルの秘密鍵を削除する**
+  ```bash
+  rm ~/.ssh/asterisk-key.pem
+  ```
+
+- [ ] **プロジェクトフォルダを削除する**（任意）
+  ```bash
+  rm -rf ~/development/asterisk-learning
+  ```
+  > GitHub にプッシュ済みの場合、リモートリポジトリはそのまま残ります。
 
 ---
 
