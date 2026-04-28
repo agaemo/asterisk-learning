@@ -190,23 +190,29 @@ RTP（音声データ）に使うポート範囲を指定します。Security Gr
 
 ## 通話の流れ（全体）
 
-```
-[1] REGISTER（登録）
-    Zoiper(1001) ──SIP REGISTER──> Asterisk
-    Asterisk    <──SIP 200 OK───── Asterisk
-    （AOR に 1001 の現在地を記録）
+```mermaid
+sequenceDiagram
+    participant Z1 as Zoiper（1001）
+    participant AS as Asterisk
+    participant Z2 as Zoiper（1002）
 
-[2] INVITE（発信）
-    Zoiper(1001) ──SIP INVITE 1002──> Asterisk
-    Asterisk     ──SIP INVITE──>      Zoiper(1002)
-    Zoiper(1002) ──SIP 200 OK──>      Asterisk
-    Asterisk     ──SIP 200 OK──>      Zoiper(1001)
+    Note over Z1,AS: 1. REGISTER（登録）
+    Z1->>AS: SIP REGISTER
+    AS-->>Z1: 200 OK（AORに1001の現在地を記録）
 
-[3] RTP（通話中）
-    Zoiper(1001) <══RTP（音声）══> Asterisk <══RTP（音声）══> Zoiper(1002)
+    Note over Z1,Z2: 2. INVITE（発信：1001 → 1002）
+    Z1->>AS: SIP INVITE 1002
+    AS->>Z2: SIP INVITE
+    Z2-->>AS: 200 OK（応答）
+    AS-->>Z1: 200 OK
 
-[4] BYE（切断）
-    Zoiper(1001) ──SIP BYE──> Asterisk ──SIP BYE──> Zoiper(1002)
+    Note over Z1,Z2: 3. RTP（通話中・音声データ）
+    Z1<<-->>AS: RTP 音声
+    AS<<-->>Z2: RTP 音声
+
+    Note over Z1,Z2: 4. BYE（切断）
+    Z1->>AS: SIP BYE
+    AS->>Z2: SIP BYE
 ```
 
 SIP は「電話をかける・受ける・切る」という制御だけを担当し、実際の音声は RTP という別プロトコルで流れます。
