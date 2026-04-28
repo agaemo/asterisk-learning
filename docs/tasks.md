@@ -1,5 +1,53 @@
 # 手順チェックリスト
 
+## 全体の流れ
+
+```mermaid
+flowchart TD
+    A([開始]) --> B
+
+    subgraph INIT["① AWSアカウント初期設定"]
+        B[AWSアカウント作成] --> C[MFA設定]
+        C --> D[請求アラート設定]
+    end
+
+    subgraph PREP["② 事前準備"]
+        E[IAMユーザー作成] --> F[AWS CLI設定]
+        F --> G[Terraform インストール]
+        G --> H[EC2 Key Pair作成\n※東京リージョンで作成]
+        H --> I[Zoiper インストール]
+    end
+
+    subgraph INFRA["③ インフラ構築"]
+        J[terraform.tfvars 作成] --> K[terraform apply]
+        K --> L[EC2起動待ち]
+    end
+
+    subgraph ASTERISK["④ Asterisk設定"]
+        M[pjsip.conf 作成・編集] --> N[rsync で EC2 に転送]
+        N --> O[Asterisk 再起動・動作確認]
+    end
+
+    subgraph TEST["⑤ 通話テスト"]
+        P[Zoiper に 1001 登録] --> Q[Zoiper に 1002 登録]
+        Q --> R[内線通話テスト]
+    end
+
+    subgraph CLEANUP["⑥ 後片付け"]
+        S[terraform destroy] --> T[Zoiper 削除]
+        T --> U[pjsip.conf・tfvars 削除]
+    end
+
+    D --> E
+    I --> J
+    L --> M
+    O --> P
+    R --> S
+    U --> Z([完了])
+```
+
+---
+
 ## 内線通話を動かす
 
 ### AWSアカウントの初期設定
