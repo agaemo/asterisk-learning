@@ -1,6 +1,6 @@
 resource "aws_security_group" "asterisk" {
   name        = "${var.project}-sg"
-  description = "Asterisk サーバー用 Security Group"
+  description = "Security Group for Asterisk server"
   vpc_id      = var.vpc_id
 
   # SSH
@@ -31,7 +31,7 @@ resource "aws_security_group" "asterisk" {
   }
 
   egress {
-    description = "すべての送信トラフィックを許可"
+    description = "Allow all outbound traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
