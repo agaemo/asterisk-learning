@@ -91,11 +91,7 @@
 
 - [ ] **EC2 が SSH 接続できるまで待つ**（apply 完了後 1〜2 分）
   ```bash
-  # SSH が通るまでリトライ
-  until ssh -i asterisk-key.pem -o ConnectTimeout=5 -o StrictHostKeyChecking=no ubuntu@<EIP> "echo ok"; do
-    echo "待機中..."; sleep 10
-  done
-  echo "SSH 接続可能になりました"
+  bash scripts/wait-for-ssh.sh <EIP> ~/.ssh/asterisk-key.pem
   ```
 
 ---
@@ -105,7 +101,7 @@
 - [ ] **Asterisk のインストール完了を待つ**（apply 後 10〜15 分）
   ```bash
   # ログを確認（"インストール完了" が出たらOK）
-  ssh -i asterisk-key.pem ubuntu@<EIP> "tail -f /var/log/asterisk-install.log"
+  ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "tail -f /var/log/asterisk-install.log"
   ```
 
 - [ ] **pjsip.conf を作成する**
@@ -128,13 +124,13 @@
 - [ ] **設定ファイルを EC2 に転送する**
   ```bash
   # --rsync-path="sudo rsync": /etc/asterisk/ は asterisk:asterisk 所有のため sudo が必要
-  rsync -av --rsync-path="sudo rsync" -e "ssh -i asterisk-key.pem" asterisk/ ubuntu@<EIP>:/etc/asterisk/
-  ssh -i asterisk-key.pem ubuntu@<EIP> "sudo systemctl restart asterisk"
+  rsync -av --rsync-path="sudo rsync" -e "ssh -i ~/.ssh/asterisk-key.pem" asterisk/ ubuntu@<EIP>:/etc/asterisk/
+  ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "sudo systemctl restart asterisk"
   ```
 
 - [ ] **Asterisk の動作を確認する**
   ```bash
-  ssh -i asterisk-key.pem ubuntu@<EIP> "sudo asterisk -rx 'pjsip show endpoints'"
+  ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "sudo asterisk -rx 'pjsip show endpoints'"
   # 1001 と 1002 が表示されればOK
   ```
 
@@ -155,7 +151,7 @@
 
 - [ ] **通話テストをする**
   - スマホ（1001）から PC（1002）にダイヤル
-  - PC 側に着信が来ればフェーズ1完了！
+  - PC 側に着信が来れば完了！
 
 ---
 

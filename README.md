@@ -95,7 +95,7 @@ elastic_ip = "x.x.x.x"
 ```
 
 > **注意:** Asterisk のインストールは User Data で実行されます。EC2 起動後、完了まで約 10〜15 分かかります。
-> 進捗確認: `ssh ubuntu@<EIP> "tail -f /var/log/asterisk-install.log"`
+> 進捗確認: `ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "tail -20 /var/log/asterisk-install.log"`
 
 EC2 が SSH 接続できるまで待機する（apply 直後は接続不可）:
 
@@ -129,7 +129,7 @@ ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "sudo systemctl restart asterisk"
 
 ```bash
 # エンドポイント登録状態を確認
-ssh ubuntu@<EIP> "sudo asterisk -rx 'pjsip show endpoints'"
+ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "sudo asterisk -rx 'pjsip show endpoints'"
 ```
 
 ---
