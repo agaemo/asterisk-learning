@@ -137,15 +137,24 @@ ssh ubuntu@<EIP> "sudo asterisk -rx 'pjsip show endpoints'"
 
 ## トラブルシューティング
 
-### terraform plan/apply が "timeout while waiting for plugin to start" になる（Apple Silicon Mac）
+### terraform plan/apply が "timeout while waiting for plugin to start" になる
 
-Terraform が `darwin_amd64` 版になっている場合に発生します。ARM 版に入れ直してください。
+**対象:** Intel Mac から Apple Silicon Mac（M1/M2/M3）に移行したユーザー
+
+Intel Mac 時代に Homebrew をインストールしていた場合、移行後も Intel 版の Homebrew（`/usr/local`）が残り続けます。その状態で Terraform をインストールすると Intel 版（`darwin_amd64`）が入り、Apple Silicon 上で正常に動かないことがあります。
+
+まず自分が該当するか確認してください。
 
 ```bash
-# チップを確認
-uname -m   # arm64 なら Apple Silicon
+uname -m          # arm64 なら Apple Silicon
+terraform version # darwin_amd64 と表示されていれば問題あり
+which brew        # /usr/local/bin/brew なら Intel 版 Homebrew
+```
 
-# ARM 版 Homebrew をインストール（未導入の場合）
+3つとも該当する場合、以下の手順で ARM 版に入れ直してください。
+
+```bash
+# ARM 版 Homebrew をインストール
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
