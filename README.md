@@ -218,7 +218,7 @@ terraform -chdir=terraform destroy
 
 ---
 
-## フェーズ2（今後の拡張）
+## 今後の拡張（任意）
 
 Twilio SIP トランクを接続して実際の電話番号（日本の番号）での発着信を試す。
-→ `docs/requirements.md` のフェーズ2を参照
+→ `docs/requirements.md` を参照
