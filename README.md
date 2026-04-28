@@ -84,6 +84,12 @@ elastic_ip = "x.x.x.x"
 > **注意:** Asterisk のインストールは User Data で実行されます。EC2 起動後、完了まで約 10〜15 分かかります。
 > 進捗確認: `ssh ubuntu@<EIP> "tail -f /var/log/asterisk-install.log"`
 
+EC2 が SSH 接続できるまで待機する（apply 直後は接続不可）:
+
+```bash
+bash scripts/wait-for-ssh.sh <EIP> ~/.ssh/asterisk-key.pem
+```
+
 ### 3. Asterisk 設定ファイルを準備する
 
 ```bash
@@ -102,8 +108,8 @@ external_signaling_address=<apply で出力された Elastic IP>
 ### 4. 設定ファイルを EC2 に転送する
 
 ```bash
-rsync -av asterisk/ ubuntu@<EIP>:/etc/asterisk/
-ssh ubuntu@<EIP> "sudo systemctl restart asterisk"
+rsync -av --rsync-path="sudo rsync" -e "ssh -i ~/.ssh/asterisk-key.pem" asterisk/ ubuntu@<EIP>:/etc/asterisk/
+ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "sudo systemctl restart asterisk"
 ```
 
 ### 5. 動作確認
@@ -131,10 +137,34 @@ ssh ubuntu@<EIP> "sudo asterisk -rx 'pjsip show endpoints'"
 
 ## トラブルシューティング
 
+### terraform plan/apply が "timeout while waiting for plugin to start" になる（Apple Silicon Mac）
+
+Terraform が `darwin_amd64` 版になっている場合に発生します。ARM 版に入れ直してください。
+
+```bash
+# チップを確認
+uname -m   # arm64 なら Apple Silicon
+
+# ARM 版 Homebrew をインストール（未導入の場合）
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# ARM 版 Terraform をインストール
+brew tap hashicorp/tap
+brew install hashicorp/tap/terraform
+
+# .terraform を削除して再初期化
+rm -rf terraform/.terraform
+terraform -chdir=terraform init
+
+# 確認（darwin_arm64 と表示されれば OK）
+terraform version
+```
+
 ### 登録できない
 ```bash
 # Asterisk のログをリアルタイム確認
-ssh ubuntu@<EIP> "sudo asterisk -rvvv"
+ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "sudo tail -f /var/log/asterisk/messages.log"
 ```
 
 ### 音声が片方しか聞こえない（ワンウェイオーディオ）
@@ -142,7 +172,16 @@ ssh ubuntu@<EIP> "sudo asterisk -rvvv"
 
 ### インストールが完了しているか確認
 ```bash
-ssh ubuntu@<EIP> "cat /var/log/asterisk-install.log | tail -20"
+ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "tail -20 /var/log/asterisk-install.log"
+```
+
+### IP アドレスが変わって SSH・SIP が接続できなくなった
+```bash
+# 現在の IP を確認
+curl https://checkip.amazonaws.com
+
+# terraform.tfvars の my_ip を更新して apply
+terraform -chdir=terraform apply
 ```
 
 ---
