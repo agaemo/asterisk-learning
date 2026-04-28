@@ -119,6 +119,11 @@
     # パスワード生成の例
     openssl rand -base64 16
     ```
+  編集後、プレースホルダーが残っていないか確認する:
+  ```bash
+  grep "<" asterisk/pjsip.conf
+  # 何も表示されなければOK
+  ```
 
 - [ ] **設定ファイルを EC2 に転送する**
   ```bash

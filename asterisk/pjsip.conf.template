@@ -22,7 +22,7 @@ disallow=all
 allow=ulaw
 allow=alaw
 auth=auth1001
-aors=aor1001
+aors=1001
 ; NAT 環境では direct_media=no が必須
 direct_media=no
 rtp_symmetric=yes
@@ -35,7 +35,7 @@ auth_type=userpass
 username=1001
 password=<STRONG_PASSWORD_1001>
 
-[aor1001]
+[1001]
 type=aor
 max_contacts=1
 
@@ -48,7 +48,7 @@ disallow=all
 allow=ulaw
 allow=alaw
 auth=auth1002
-aors=aor1002
+aors=1002
 direct_media=no
 rtp_symmetric=yes
 force_rport=yes
@@ -60,6 +60,6 @@ auth_type=userpass
 username=1002
 password=<STRONG_PASSWORD_1002>
 
-[aor1002]
+[1002]
 type=aor
 max_contacts=1
