@@ -86,6 +86,18 @@ ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "sudo tail -f /var/log/asterisk/mess
 ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "tail -20 /var/log/asterisk-install.log"
 ```
 
+### Asterisk サービスを再起動したい
+
+設定変更後や動作がおかしいときはサービスを再起動してください。
+
+```bash
+# 再起動
+ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "sudo systemctl restart asterisk"
+
+# 起動状態の確認（Active: active (running) と表示されれば正常）
+ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "sudo systemctl status asterisk"
+```
+
 ### IP アドレスが変わって SSH・SIP が接続できなくなった
 ```bash
 # 現在の IP を確認
