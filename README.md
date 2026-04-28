@@ -196,6 +196,19 @@ terraform -chdir=terraform destroy
 
 ---
 
+## ドキュメント
+
+| ファイル | 内容 |
+|---|---|
+| [docs/terraform-intro.md](docs/terraform-intro.md) | Terraform の仕組み・コードの読み方・各 AWS リソースの役割 |
+| [docs/asterisk-guide.md](docs/asterisk-guide.md) | pjsip.conf・extensions.conf・rtp.conf の解説・通話の流れ・NAT対策の理由 |
+| [docs/requirements.md](docs/requirements.md) | プロジェクトの要件定義 |
+| [docs/tasks.md](docs/tasks.md) | フェーズ1の手順チェックリスト |
+
+> セットアップ手順だけでなく、設定の意味や仕組みを理解したい場合は上記ドキュメントを参照してください。
+
+---
+
 ## フェーズ2（今後の拡張）
 
 Twilio SIP トランクを接続して実際の電話番号（日本の番号）での発着信を試す。
