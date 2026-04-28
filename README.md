@@ -99,6 +99,9 @@ ssh -i ~/.ssh/asterisk-key.pem ubuntu@<EIP> "sudo systemctl status asterisk"
 ```
 
 ### IP アドレスが変わって SSH・SIP が接続できなくなった
+
+モバイル回線やテザリング、一部の Wi-Fi 環境ではネットワークに接続するたびにグローバル IP が変わることがあります。Security Group の許可 IP とずれると SSH も SIP も繋がらなくなるため、接続できなくなったら下記で確認・更新してください。
+
 ```bash
 # 現在の IP を確認
 curl https://checkip.amazonaws.com
