@@ -182,6 +182,76 @@ Zoiper（スマホ）             Asterisk            Zoiper（PC）
 
 ---
 
+## Terraform コードの読み方
+
+### resource ブロック
+
+```hcl
+resource "aws_instance" "asterisk" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+  key_name      = var.key_name
+}
+```
+
+`resource "<種類>" "<名前>"` という書き方で AWS リソースを定義します。種類はプロバイダーが決めた名前（`aws_instance`、`aws_vpc` など）で、名前は Terraform 内での識別子です。
+
+### variable と var
+
+```hcl
+# variables.tf（定義）
+variable "my_ip" {
+  description = "自分の IP アドレス"
+  type        = string
+}
+
+# main.tf（使う側）
+cidr_blocks = [var.my_ip]
+```
+
+変数を定義して再利用します。実際の値は `terraform.tfvars` に書きます。
+
+```hcl
+# terraform.tfvars（値）
+my_ip = "203.0.113.1/32"
+```
+
+### data ブロック
+
+```hcl
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"]
+  filter { ... }
+}
+```
+
+AWS から情報を「読み取る」ブロックです。Ubuntu の最新 AMI ID を動的に取得しているため、AMI ID をハードコードせずに済みます。
+
+### module
+
+```hcl
+module "ec2" {
+  source    = "./modules/ec2"
+  subnet_id = module.vpc.subnet_id
+  sg_id     = module.sg.sg_id
+}
+```
+
+他のディレクトリの `.tf` ファイルを部品として呼び出します。`module.vpc.subnet_id` は vpc モジュールの `outputs.tf` で定義した値を参照しています。
+
+### output
+
+```hcl
+output "elastic_ip" {
+  value = module.ec2.elastic_ip
+}
+```
+
+`terraform apply` 完了後に表示する値を定義します。Elastic IP を出力しているのは、Zoiper や rsync コマンドですぐ使えるようにするためです。
+
+---
+
 ## よくある疑問
 
 **Q: Elastic IP がないとダメですか？**
