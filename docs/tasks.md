@@ -2,6 +2,9 @@
 
 ## 全体の流れ
 
+<details>
+<summary>フローチャートを表示</summary>
+
 ```mermaid
 flowchart TD
     A([開始]) --> B
@@ -45,6 +48,8 @@ flowchart TD
     R --> S
     U --> Z([完了])
 ```
+
+</details>
 
 ---
 
