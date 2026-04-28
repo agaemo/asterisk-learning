@@ -164,6 +164,21 @@
   ```
   > **注意**: インスタンスを「停止（stop）」するだけでは不十分です。Elastic IP はインスタンスに関連付けられていても、インスタンスが停止中は課金（$0.005/時間）が発生します。学習が終わったら必ず `destroy` してください。
 
+- [ ] **Zoiper をアンインストールする**（任意）
+  - スマートフォン: アプリを長押し → 削除
+  - PC（Mac）: Zoiper5.app をゴミ箱に移動
+
+- [ ] **pjsip.conf を削除する**
+  ```bash
+  rm asterisk/pjsip.conf
+  ```
+  パスワードを含むファイルのため、不要になったら削除してください。
+
+- [ ] **terraform.tfvars を削除する**
+  ```bash
+  rm terraform/terraform.tfvars
+  ```
+
 ---
 
 ## 拡張（任意）: Twilio で実番号発着信
