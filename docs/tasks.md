@@ -260,11 +260,9 @@ flowchart TD
   rm ~/.ssh/asterisk-key.pem
   ```
 
-- [ ] **プロジェクトフォルダを削除する**（任意）
-  ```bash
-  rm -rf ~/development/asterisk-learning
-  ```
-  > GitHub にプッシュ済みの場合、リモートリポジトリはそのまま残ります。
+- [ ] **ローカルのプロジェクトフォルダを削除する**（任意）
+  - Finder またはターミナルで `asterisk-learning` フォルダをゴミ箱へ
+  > このファイル自体もフォルダ内にあるため、削除は最後に行うこと。GitHub のリモートリポジトリはそのまま残ります。
 
 ---
 
