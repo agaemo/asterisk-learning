@@ -61,6 +61,10 @@ make config    # systemd ユニットファイルを登録
 
 ldconfig
 
+# asterisk ユーザー・グループを作成（make install では自動作成されないため）
+getent group asterisk || groupadd -r asterisk
+getent passwd asterisk || useradd -r -g asterisk -d /var/lib/asterisk -s /sbin/nologin -c "Asterisk" asterisk
+
 # asterisk ユーザーへの権限付与
 chown -R asterisk:asterisk /etc/asterisk
 chown -R asterisk:asterisk /var/log/asterisk
