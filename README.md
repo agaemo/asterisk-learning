@@ -39,6 +39,19 @@ cd my-asterisk-learning
 
 ---
 
+## ドキュメント
+
+| ファイル | 内容 |
+|---|---|
+| [docs/terraform-intro.md](docs/terraform-intro.md) | Terraform の仕組み・コードの読み方・各 AWS リソースの役割 |
+| [docs/asterisk-guide.md](docs/asterisk-guide.md) | pjsip.conf・extensions.conf・rtp.conf の解説・通話の流れ・NAT対策の理由 |
+| [docs/requirements.md](docs/requirements.md) | プロジェクトの要件定義 |
+| [docs/tasks.md](docs/tasks.md) | フェーズ1の手順チェックリスト |
+
+> セットアップ手順だけでなく、設定の意味や仕組みを理解したい場合は上記ドキュメントを参照してください。
+
+---
+
 ## 前提条件
 
 | ツール | バージョン |
@@ -202,19 +215,6 @@ terraform -chdir=terraform destroy
 ```
 
 > **注意:** Elastic IP は削除されるまで課金されます。学習終了後は必ず destroy してください。
-
----
-
-## ドキュメント
-
-| ファイル | 内容 |
-|---|---|
-| [docs/terraform-intro.md](docs/terraform-intro.md) | Terraform の仕組み・コードの読み方・各 AWS リソースの役割 |
-| [docs/asterisk-guide.md](docs/asterisk-guide.md) | pjsip.conf・extensions.conf・rtp.conf の解説・通話の流れ・NAT対策の理由 |
-| [docs/requirements.md](docs/requirements.md) | プロジェクトの要件定義 |
-| [docs/tasks.md](docs/tasks.md) | フェーズ1の手順チェックリスト |
-
-> セットアップ手順だけでなく、設定の意味や仕組みを理解したい場合は上記ドキュメントを参照してください。
 
 ---
 
