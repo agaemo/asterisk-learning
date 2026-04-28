@@ -22,7 +22,7 @@ resource "aws_instance" "asterisk" {
   key_name               = var.key_name
 
   # Asterisk インストールスクリプトを起動時に実行
-  user_data = file("${path.module}/../../scripts/install.sh")
+  user_data = file("${path.root}/../scripts/install.sh")
 
   # フリーティア対象のストレージ（gp3 は gp2 より高性能で同価格）
   root_block_device {
